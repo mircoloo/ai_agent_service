@@ -2,13 +2,15 @@ import os
 from agents import Agent, Runner, trace
 from dotenv import load_dotenv
 import asyncio
+from utils import InvoiceCategoryOutput
 load_dotenv()
 
 
 agent = Agent(
     name="MyTestAgent",
     model="gpt-4o-mini",
-    instructions="Un agente che deve riconoscere le categoria di una fattura con il testo estratto tramite OCR da un pdf."
+    instructions="Un agente che deve riconoscere le categoria di una fattura con il testo estratto tramite OCR da un pdf.",
+    output_type=InvoiceCategoryOutput,
 )
 
 s = """FATTURA N. 145/2024  DATA 12/02/2024
@@ -47,5 +49,7 @@ async def run_agent():
 
 if __name__ == "__main__":
     asyncio.run(run_agent())
+    
+    
 
 
