@@ -4,6 +4,7 @@ import os
 
 def load_config():
     load_dotenv()
+
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     PORT = int(os.getenv("PORT", 8000))
 

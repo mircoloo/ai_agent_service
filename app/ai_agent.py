@@ -1,13 +1,16 @@
-from agents import Agent, Runner, trace, function_tool
-from app.utils import InvoiceCategoryOutput
+from agents import Agent, Runner, SQLiteSession
+from .schemas import InvoiceCategoryOutput
 from openai import OpenAI
-
-client = OpenAI()  # picks the key from the environment
+from .schemas import ChatResponse
 
 agent = Agent(
-    name="MyTestAgent",
+    name="",
     model="gpt-4o-mini",
-    instructions="Un agente che deve riconoscere le categoria di una fattura con il testo estratto tramite OCR da un pdf.",
-    output_type=InvoiceCategoryOutput,
-    client=client,
+    instructions="Your are a general agent which have to orcherstrate which agent to call for the best response or if you know you can response yourself.",
+    #output_type=InvoiceCategoryOutput,
 )
+
+
+
+
+

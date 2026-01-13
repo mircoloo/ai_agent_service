@@ -1,27 +1,30 @@
-import os
-from app.ai_agent import agent
-from dotenv import load_dotenv
+import logging
 import asyncio
-from app.utils import InvoiceCategoryOutput, ChatRequest, sample_invoice_text
-from fastapi import FastAPI
-from config import load_config
+from fastapi import FastAPI, Body
+from fastapi.responses import HTMLResponse
+from fastapi.staticfiles import StaticFiles
 
+from .schemas import InvoiceCategoryOutput, ChatRequest, ChatResponse
+from .config import load_dotenv
+from .ai_agent import agent
+from agents import Runner
 
-load_config()
+# ---- logging ----
+logger = logging.getLogger("api")
+
+# ---- config ----
+load_dotenv()
+
 app = FastAPI()
 
 @app.get("/test")
 async def test():
+    logger.info("Health check endpoint called")
     return {"message": "AI Agent Service is running."}
 
-@app.post("/chat")
-async def classify_invoice(req: ChatRequest):
-    result = await agent.run(agent, req.text)
 
-    # Se result è un oggetto, lo trasformiamo in dict
-    if hasattr(result, "dict"):
-        return result.dict()
-    return result
-    
-
-
+@app.post("/v1/chat")
+async def chat(req: ChatRequest = Body(..., description="Chat request payload")):
+    logger.info("Received chat request")
+    result = await Runner.run(agent, req.req_text)
+    return ChatResponse(res_text=result.final_output)
